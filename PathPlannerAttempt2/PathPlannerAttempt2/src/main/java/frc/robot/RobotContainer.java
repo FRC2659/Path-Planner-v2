@@ -6,6 +6,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -91,6 +93,9 @@ public class RobotContainer {
             )
         );
 
+        NamedCommands.registerCommand("Fire", new ShootCommand(s_SuperStructure).withTimeout(3));
+        NamedCommands.registerCommand("Intake", new IntakeCommand(s_SuperStructure).withTimeout(4));
+
 
         // Configure the button bindings
         configureButtonBindings();
@@ -123,6 +128,15 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-       return autoChooser.getSelected(); //think it's right one but not sure
+        s_Swerve.resetOdometry(PathPlannerAuto.getStaringPoseFromAutoFile(autoChooser.getSelected().getName()));
+        return autoChooser.getSelected(); //think it's right one but not sure
+    }
+
+    public static boolean getIsRed() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
     }
 }
