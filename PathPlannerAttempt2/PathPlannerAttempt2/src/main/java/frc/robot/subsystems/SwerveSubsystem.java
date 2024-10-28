@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkLowLevel.FollowConfig.Config;
 
 import frc.robot.SwerveModule;
@@ -14,6 +16,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+
+import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.*;
@@ -53,6 +57,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public static Pose2d poseEstimatorPose; //static reference fix 2-29-2024
 
     private final Field2d m_field = new Field2d();
+
+
     
     public SwerveSubsystem() {
         /*superStucture = new SuperStructure ();
@@ -110,30 +116,14 @@ public class SwerveSubsystem extends SubsystemBase {
            
       
             // Configure AutoBuilder
-            AutoBuilder.configure(
+            AutoBuilder.configureHolonomic(
               this::getPose, 
               this::resetOdometry, 
               this::getSpeed, 
               this::driveRobotRelative, 
-              new PPHolonomicDriveController(
-                // Constants.Swerve.angleKP,
-                // Constants.Swerve.driveKP,
-                Constants.Swerve.translationConstants,
-                Constants.Swerve.rotationConstants, 4.5, 0
-              ),
+              new HolonomicPathFollowerConfig(Constants.Swerve.translationConstants, Constants.Swerve.rotationConstants, Constants.Swerve.maxSpeed, Constants.Swerve.trackWidth/2.0, new ReplanningConfig(false, false)),
               // idk if we need to fix this: config,
-              config,
-              () -> {
-                  // Boolean supplier that controls when the path will be mirrored for the red alliance
-                  // This will flip the path being followed to the red side of the field.
-                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-      
-                  var alliance = DriverStation.getAlliance();
-                  if (alliance.isPresent()) {
-                      return alliance.get() == DriverStation.Alliance.Red;
-                  }
-                  return false;
-              },
+              RobotContainer::getIsRed,
               this
             );
           }catch(Exception e){
@@ -354,4 +344,3 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
 }
-
