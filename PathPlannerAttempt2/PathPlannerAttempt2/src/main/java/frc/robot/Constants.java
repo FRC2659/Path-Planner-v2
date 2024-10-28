@@ -88,8 +88,8 @@ public final class Constants {
         public static final double driveKF = 0.0;
 
         //added here
-        public static final PIDConstants translationConstants = new PIDConstants(0.05, 0.0, 0.0);
-        public static final PIDConstants rotationConstants = new PIDConstants(chosenModule.angleKP, 0.0, 0.0);
+        public static final PIDConstants translationConstants = new PIDConstants(3, 0.04, 0.0);
+        public static final PIDConstants rotationConstants = new PIDConstants(2, 0.02, 0.0);
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
         public static final double driveKS = (0.32 / 12); //TODO: This must be tuned to specific robot
