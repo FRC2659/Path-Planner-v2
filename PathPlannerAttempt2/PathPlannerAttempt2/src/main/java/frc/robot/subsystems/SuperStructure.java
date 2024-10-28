@@ -17,6 +17,14 @@ public class SuperStructure extends SubsystemBase{
     private static double deployTime;
     private static boolean released = false;
 
+    public static boolean isReleased() {
+        return released;
+    }
+
+    public static void setReleased(boolean released) {
+        SuperStructure.released = released;
+    }
+
     private static final Arm mArm = new Arm();
     private static final EndEffector mEndEffector = new EndEffector();
     private static final Vision vision = new Vision();
@@ -24,6 +32,10 @@ public class SuperStructure extends SubsystemBase{
     public static double climbState = 0;
     private static boolean intakeDelay = false; //time delay intake retracts when true and in auto
     public static int lightMode = 0;//0-disabled, 1-idle, 2-intaking, 3-scoring, 4-auto, 5-grabbed, 6-released
+
+    public boolean isIntaking() {
+        return mEndEffector.isIntaking();
+    }
 
     public SuperStructure() {
         SmartDashboard.putNumber("climbState", climbState);
