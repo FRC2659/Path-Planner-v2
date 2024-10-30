@@ -66,8 +66,8 @@ public class SwerveSubsystem extends SubsystemBase {
         arm = new Arm ();
         armStates = new ArmStates ();
         constants = new Constants ();
-        swerveModule = new SwerveModule ();
-        vision = new Vision();*/
+        swerveModule = new SwerveModule ();*/
+        vision = new Vision();
         SmartDashboard.putData("FIELD", m_field); 
         gyro = new Pigeon2(Constants.Swerve.pigeonID);  //2-3-24 temp fix
         gyro.getConfigurator().apply(new Pigeon2Configuration()); //2-3-24 temp fix
